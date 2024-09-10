@@ -2,10 +2,25 @@
  Changes
 =========
 
-3.0.4 (unreleased)
+3.1.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Adds support for Python 3.13.
+
+.. note::
+
+   greenlet will not work in no-gil (free threaded) builds of CPython.
+   Internally, greenlet heavily depends on the GIL.
+
+.. note::
+
+    This will be the last release to support Python 3.7 and 3.8.
+
+- Greatly reduce the chances for crashes during interpreter shutdown.
+  See `issue 411
+  <https://github.com/python-greenlet/greenlet/issues/411>`_.
+- Add untested support for Hitachi's SuperH CPU. This is not tested in
+  CI. See `issue 166 <https://github.com/python-greenlet/greenlet/issues/166>`_.
 
 
 3.0.3 (2023-12-21)
@@ -181,7 +196,7 @@ Known Issues
 =====================
 
 - Linux: Fix another group of rare crashes that could occur when shutting down an
-  interpeter running multiple threads. See `issue 325 <https://github.com/python-greenlet/greenlet/issues/325>`_.
+  interpreter running multiple threads. See `issue 325 <https://github.com/python-greenlet/greenlet/issues/325>`_.
 
 
 2.0.0rc4 (2022-10-30)

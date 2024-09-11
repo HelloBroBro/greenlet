@@ -238,12 +238,17 @@ green_setrun(BorrowedGreenlet self, BorrowedObject nrun, void* c);
 static int
 green_setparent(BorrowedGreenlet self, BorrowedObject nparent, void* c);
 
+// green_init is used in the tp_init slot. So it's important that
+// it can be called directly from CPython. Thus, we don't use
+// BorrowedGreenlet and BorrowedObject --- although in theory
+// these should be binary layout compatible, that may not be
+// guaranteed to be the case (32-bit linux ppc possibly).
 static int
-green_init(BorrowedGreenlet self, BorrowedObject args, BorrowedObject kwargs)
+green_init(PyGreenlet* self, PyObject* args, PyObject* kwargs)
 {
     PyArgParseParam run;
     PyArgParseParam nparent;
-    static const char* const kwlist[] = {
+    static char* kwlist[] = {
         "run",
         "parent",
         NULL
@@ -251,7 +256,7 @@ green_init(BorrowedGreenlet self, BorrowedObject args, BorrowedObject kwargs)
 
     // recall: The O specifier does NOT increase the reference count.
     if (!PyArg_ParseTupleAndKeywords(
-             args, kwargs, "|OO:green", (char**)kwlist, &run, &nparent)) {
+             args, kwargs, "|OO:green", kwlist, &run, &nparent)) {
         return -1;
     }
 
@@ -876,7 +881,7 @@ PyGreenlet_New(PyObject* run, PyGreenlet* parent)
             kwargs.SetItem("parent", (PyObject*)parent);
         }
 
-        Require(green_init(g, mod_globs->empty_tuple, kwargs));
+        Require(green_init(g.borrow(), mod_globs->empty_tuple, kwargs.borrow()));
     }
     catch (const PyErrOccurred&) {
         return nullptr;

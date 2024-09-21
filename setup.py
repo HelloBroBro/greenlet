@@ -64,7 +64,7 @@ if (
 
 if sys.platform == 'darwin' or 'clang' in plat_compiler:
     # The clang compiler doesn't use --std=c++11 by default
-    cpp_compile_args.append("--std=gnu++11")
+    cpp_compile_args.append("--std=c++11")
 elif is_win and "MSC" in plat_compiler:
     # Older versions of MSVC (Python 2.7) don't handle C++ exceptions
     # correctly by default. While newer versions do handle exceptions
@@ -223,6 +223,7 @@ setup(
         'Bug Tracker': 'https://github.com/python-greenlet/greenlet/issues',
         'Source Code': 'https://github.com/python-greenlet/greenlet/',
         'Documentation': 'https://greenlet.readthedocs.io/',
+        'Changes': 'https://greenlet.readthedocs.io/en/latest/changes.html',
     },
     license="MIT License",
     platforms=['any'],
